@@ -4,6 +4,26 @@ const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 
+function renderTasks() {
+  taskList.innerHTML = "";
+
+  if (tasks.length === 0) {
+    taskList.innerHTML = '<li class="empty">Belum ada task</li>';
+    return;
+  }
+
+  tasks.forEach((task) => {
+    const li = document.createElement("li");
+    li.dataset.id = task.id;
+
+    const span = document.createElement("span");
+    span.textContent = task.text;
+
+    li.appendChild(span);
+    taskList.appendChild(li);
+  });
+}
+
 function addTask() {
   const text = taskInput.value.trim();
   if (text === "") return;
@@ -16,10 +36,12 @@ function addTask() {
 
   taskInput.value = "";
   taskInput.focus();
-  console.log(tasks); // sementara, buat cek
+  renderTasks();
 }
 
 addBtn.addEventListener("click", addTask);
 taskInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") addTask();
 });
+
+renderTasks();
