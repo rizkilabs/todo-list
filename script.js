@@ -15,6 +15,12 @@ function renderTasks() {
   tasks.forEach((task) => {
     const li = document.createElement("li");
     li.dataset.id = task.id;
+    if (task.done) li.classList.add("done");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = task.done;
+    checkbox.addEventListener("change", () => toggleTask(task.id));
 
     const span = document.createElement("span");
     span.textContent = task.text;
@@ -24,6 +30,7 @@ function renderTasks() {
     deleteBtn.className = "delete-btn";
     deleteBtn.addEventListener("click", () => deleteTask(task.id));
 
+    li.appendChild(checkbox);
     li.appendChild(span);
     li.appendChild(deleteBtn);
     taskList.appendChild(li);
@@ -52,6 +59,13 @@ taskInput.addEventListener("keydown", (e) => {
 
 function deleteTask(id) {
   tasks = tasks.filter((task) => task.id !== id);
+  renderTasks();
+}
+
+function toggleTask(id) {
+  tasks = tasks.map((task) =>
+    task.id === id ? { ...task, done: !task.done } : task,
+  );
   renderTasks();
 }
 
