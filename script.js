@@ -19,7 +19,13 @@ function renderTasks() {
     const span = document.createElement("span");
     span.textContent = task.text;
 
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Hapus";
+    deleteBtn.className = "delete-btn";
+    deleteBtn.addEventListener("click", () => deleteTask(task.id));
+
     li.appendChild(span);
+    li.appendChild(deleteBtn);
     taskList.appendChild(li);
   });
 }
@@ -43,5 +49,10 @@ addBtn.addEventListener("click", addTask);
 taskInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") addTask();
 });
+
+function deleteTask(id) {
+  tasks = tasks.filter((task) => task.id !== id);
+  renderTasks();
+}
 
 renderTasks();
