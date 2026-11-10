@@ -1,4 +1,19 @@
-let tasks = [];
+const STORAGE_KEY = "todo-tasks";
+
+function loadTasks() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    return []; // data rusak atau storage tidak tersedia
+  }
+}
+
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+let tasks = loadTasks();
 
 let editingId = null;
 
@@ -82,6 +97,8 @@ function addTask() {
     done: false,
   });
 
+  saveTasks();
+
   taskInput.value = "";
   taskInput.focus();
   renderTasks();
@@ -94,6 +111,7 @@ taskInput.addEventListener("keydown", (e) => {
 
 function deleteTask(id) {
   tasks = tasks.filter((task) => task.id !== id);
+  saveTasks();
   renderTasks();
 }
 
@@ -101,6 +119,7 @@ function toggleTask(id) {
   tasks = tasks.map((task) =>
     task.id === id ? { ...task, done: !task.done } : task,
   );
+  saveTasks();
   renderTasks();
 }
 
@@ -121,6 +140,7 @@ function saveEdit(id, newText) {
   tasks = tasks.map((task) =>
     task.id === id ? { ...task, text: text } : task,
   );
+  saveTasks();
   editingId = null;
   renderTasks();
 }
